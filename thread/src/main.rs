@@ -3,16 +3,26 @@ use std::{thread, time::Duration, sync::{atomic::{AtomicU32, Ordering}, Mutex, A
 use threadpool::ThreadPool;
 
 
+/**
+ * 创建线程基本语法：
+ * thread::spawn(move || { dosomething! })
+ */
+
+
 // atomic类型，与java类似，可以进行多线程计数
 static COUNT: AtomicU32 = AtomicU32::new(0);
 
 fn main() {     
+    // 1 线程基础，Mutex，Atomic用法
     thread_basic();
+
+    // 2 channel基础用法
     channel_basic();
 
-    // 线程池，需要用第三方库threadpool = "1.8.1"
+    // 3 线程池，需要用第三方库threadpool = "1.8.1"
     thread_pool_basic();
     
+    // 4 栅栏 阻拦特定数量线程后，一次性放开
     barrier_basic();
 }
 

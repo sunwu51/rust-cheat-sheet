@@ -6,6 +6,13 @@ fn main() {
     let it: Iter<String> = v.iter();
     let it2: IntoIter<String> = v.clone().into_iter();
 
+    // 一个技巧是Iter一般可以通过collect方法转回Vec
+    // collect的子元素类型可以直接写在其后面::<Type>，可以在前面变量声明时指定类型
+    v.iter().collect::<Vec<&String>>();
+    let _v: Vec<&String> = v.iter().collect();
+    v.clone().into_iter().collect::<Vec<String>>();
+
+
     // 遍历, ele是&String，不获取所有权的
     for ele in it {
         println!("{}", ele);
