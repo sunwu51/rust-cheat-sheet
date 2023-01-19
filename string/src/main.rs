@@ -49,6 +49,13 @@ fn main() {
         // 函数返回值一般不能是引用类型，所以不是&str，最好用String类型。例如str中的转小写方法
     let s: String = s.to_lowercase();
 
+
+    // r#"中间放原生字符串，不需要转义\ 回车等"#
+    let raw_str = r#"
+        这里的\n是俩字符而不是回车
+        dsafdsaf
+        dsfaf
+    "#;
     
 }
 
