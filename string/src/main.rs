@@ -54,6 +54,15 @@ fn main() {
 
 
 fn vec_to_string(vec: Vec<u8>) -> String {
+    //String结构体内就是一个vec成员
+    //pub struct String {
+    //     vec: Vec<u8>,
+    // }
+    
+    // 这样写就可以，但是这个写法不去校验utf8的合法性
+    // String {vec: vec}
+
+    // 这个封装的方法是校验了utf8合法性的
     String::from_utf8(vec).unwrap()
 }
 
