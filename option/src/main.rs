@@ -1,3 +1,5 @@
+/// Option用于处理空值，经常用于函数的返回值，在其他语言中经常用-1 Null这样的哨兵值
+/// 在Rust中则需要用Option作为返回类型。
 fn main() {
     let o1 = Some(1);
     let mut o2: Option<i32> = None;

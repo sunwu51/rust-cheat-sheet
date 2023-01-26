@@ -1,4 +1,4 @@
-/// Cell改变内部可变性，还是单链表的例子中 Box可以修改节点的值，但是不能多所有者。Rc可以多所有者但是只能as_ref不能as_mut所以Rc下是不可变的
+/// 1 Cell改变内部可变性，还是单链表的例子中 Box可以修改节点的值，但是不能多所有者。Rc可以多所有者但是只能as_ref不能as_mut所以Rc下是不可变的
 ///     如果想在不可变变量下去改变可变性，即改变内部可变性，则需要用Cell或者RefCell，一般来说Cell适用于实现了Copy的例如u32等类型，对于其他类型一般使用RefCell更好
 ///     但是也可以对非Copy用Cell，下面的demo会看到
 /// 我们先来说Cell，Cell顾名思义就是一个细胞一个盒子名称上类似Box或者Wrapper之类的，其实他做的事情就是Cell<T>包裹的数据t，通过cell提供的set方法可以直接修改t的值，而不需要受限于引用可变等规则
@@ -22,7 +22,7 @@
 
 use std::{rc::Rc, cell::Cell};
 
-/// 接下来我们会到单链表的例子，因为加了Cell就可以进行替换(写)操作了，所以之前Rc的版本中我们无法对val和next进行修改，这里我们对这两项都用Cell包装一下
+/// 2 接下来我们会到单链表的例子，因为加了Cell就可以进行替换(写)操作了，所以之前Rc的版本中我们无法对val和next进行修改，这里我们对这两项都用Cell包装一下
 // #[derive(Debug)] Debug无法派生，因为Cell中如果是非Copy的，那么就无法派生Debug
 enum Node {
     Some(Cell<i32>, Cell<Rc<Node>>),

@@ -21,6 +21,7 @@ enum Node {
     // 我们把val用Cell，next用RefCell<Rc<>>来包装，这样我们在可以修改val和next指向。
     // Cell适合包裹Copy，RefCell适合包裹非Copy，他们各自用在合适的场景
     Some(Cell<i32>,RefCell<Rc<Node>>),
+    // RefCell<Rc>这里纯粹是为了构造环形，一般Rc<RefCell>是更常用的。
     None
 }
 

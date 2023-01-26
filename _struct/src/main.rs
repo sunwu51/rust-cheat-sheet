@@ -1,5 +1,5 @@
 
-// 结构体的基本声明方式
+// 1 结构体的基本声明方式
 #[derive(Debug)]
 struct Node {
     id: i32,
@@ -8,7 +8,7 @@ struct Node {
     name: String,
 }
 
-// 结构体实现方法
+// 2 结构体实现方法
 impl Node {
     // 静态方法，可以不指定self，通过Node::new调用
     fn new(id: i32) -> Node {

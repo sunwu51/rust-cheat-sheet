@@ -1,6 +1,6 @@
 use std::fmt::Debug;
 
-/// trait 的声明与基本使用，一定记住的是特征只是一种对泛型的约束，重心还在泛型
+/// 1 trait 的声明与基本使用，一定记住的是特征只是一种对泛型的约束，重心还在泛型
 trait Say {
     fn say_hello(&self);
     fn give_me_five(&self) -> i32 {
@@ -20,7 +20,7 @@ impl Say for User {
     }
 }
 
-/// 特征约束，特征与接口很像，但是也有重要的不同，就是trait不是一种类型，不能被函数作为参数类型的，
+/// 2 特征约束，特征与接口很像，但是也有重要的不同，就是trait不是一种类型，不能被函数作为参数类型的，
 ///     特征只能作为泛型的约束来修饰函数出参和入参，例如在入参添加impl trait修饰才代表是实现了Say的类型
 ///     impl是普通函数约束写法的语法糖
 fn f1(sayer : impl Say) {
@@ -42,7 +42,7 @@ where T: Say + Debug {
     sayer.say_hello();
 }
 
-/// 重点来了，f1-f4 trait作为入参，其实本质可以传任何实现了该trait的类型，即这个函数底层会编译成很多份。
+/// 3 重点来了，f1-f4 trait作为入参，其实本质可以传任何实现了该trait的类型，即这个函数底层会编译成很多份。
 /// 但是作为返回值则不可以，原因是返回值如果是动态的，例如A和B结构体都实现了trait，那么if一个条件返回A，否则返回B
 /// 那么返回的类型就是不确定的，调用方的栈上就不知道申请多大的空间了，因而不能在返回值类型使用泛型+trait
 // fn f5<T>() -> T 
@@ -84,6 +84,23 @@ trait A {
     
 }
 
+/// 4 关联类型，是指在trait中首行声明一个type xx，并且后面使用Self::xx代表这个类型
+/// 例如Iterator中的Item。
+/// 
+/// pub trait Iterator {
+/// type Item;
+/// 
+/// fn next(&mut self) -> Option<Self::Item>;
+/// }
+/// 
+/// 关联类型可以直接用泛型所代替例如trait Iterator<T>{fn next(&mut self)->Option<T>}
+/// 效果是一样的，但是关联类型的写法，更加简洁，比如当trait中的函数需要多次使用type，
+/// 再比如当trait被拿去约束泛型的时候，这个trait里需要写<泛型>的，而关联类型就不需要
+/// 
+
+
+/// 5 对于同一个struct实现多个特征且具有同名方法时，不要用struct.func调用，容易不知道调用的哪个
+///     而是使用Trait::func(&struct)
 
 fn main() {
     let user = User {id: 1, name: "foo".to_string()};
