@@ -1,4 +1,6 @@
-use std::fmt::Debug;
+use std::{fmt::{Debug, Display}, str::FromStr, error::Error, num::ParseIntError};
+
+use derive_error::Error;
 
 /// 1 trait 的声明与基本使用，一定记住的是特征只是一种对泛型的约束，重心还在泛型
 trait Say {
@@ -109,5 +111,28 @@ fn main() {
     let user = User {id: 1, name: "foo".to_string()};
     let res = f8(&user);
     res.say_hello();
+
+    let a = "123";
+    let x = a.to_string().parse::<i32>();
+    i32::from_str("111").unwrap();
+    
+    a.to_string();
+    let s = String::from(a);
+    
+    // let s: &str = s.into();
 }
 
+/// 6 trait的继承用T2:T1表示继承T1特征，如果一个结构体要实现T2，那么需要同时实现T1才行
+struct T {}
+trait T1 {
+    fn t1_f(&self) {}
+}
+trait T2: T1 {
+    fn t2_f(&self) {}
+}
+impl T1 for T {
+    fn t1_f(&self) {}
+}
+impl T2 for T {
+    fn t2_f(&self) {}
+}
