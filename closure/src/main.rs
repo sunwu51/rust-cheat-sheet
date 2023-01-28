@@ -47,7 +47,8 @@ fn main() {
     thread::spawn(move || println!("{}", x));
 }
 
-// 1 fn作为参数直接写fn(入参类型)->返回类型，fn不是trait而是一种类型.->()可以不写
+// 1 fn作为参数直接写fn(入参类型)->返回类型，fn不是trait而是一种类型.->()可以不写.
+// fn是函数指针，所以是固定大小因而可以作为其他fn的返回值。
 fn ff1(f: fn() -> ()) {f();}
 
 // 2 Fn FnMut FnOnce是trait不是类型，需要用特征约束或者impl语法糖，或者特征对象(堆上)
