@@ -12,7 +12,7 @@ fn f1(s: &str) -> Result<i32, MyError> {
 
 #[derive(Debug, Error, PartialEq)]
 enum MyError {
-    #[error("转换出错")]
+    #[error("转换出错")] // for display
     ParseError(#[from] ParseIntError),
 
     #[error("字符串 `{0}` 长度 `{1}` 过长")]
@@ -35,7 +35,7 @@ mod tests {
 
         let res = f1("123");
         assert_eq!(res.is_err(), true);
-        println!("{:?}", res);
+        println!("{}", res.err().unwrap()); // 字符串 `123` 长度 `3` 过长
 
         let res = f1("ab");
         assert_eq!(res.is_err(), true);
