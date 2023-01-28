@@ -139,7 +139,9 @@ impl FromStr for Point {
     }
 }
 ```
-当然上面的万能错误类型其实对使用者并不友好，向上反映错误的时候，会比较难定位。可以用`derive_error`这个第三方派生宏，将自定义Error定义为enum，枚举的每个成员必须是空或者Error，如下，可以把Other改为多个更具体的错误信息。
+当然上面的万能错误类型其实对使用者并不友好，向上反映错误的时候，会比较难定位。可以用`derive_error`或者`thiserror`这个第三方派生宏，将自定义Error定义为enum.
+
+下面是`derive_error`包的介绍，`thiserror`的请自行查看后续thiserror章节。枚举的每个成员必须是空或者Error，如下，可以把Other改为多个更具体的错误信息。
 ```rs
 #[derive(Debug, Error)]
 enum ParsePointError {

@@ -18,6 +18,7 @@ fn main() {
         Err(Box::new(io::Error::new(io::ErrorKind::Other, "xx")))
     };
     //   - 2.2 自定义Error类型，拥有两个变体，需要引入第三方宏derive-error = "0.0.4"
+    //      这里使用的是derive_error，但是推荐使用更强大好用的thiserror，请查看thiserror相关章节
     #[derive(Debug, Error)] // Error需要和Debug一起放在派生中，这样就继承自std::error::Error符合rust生态了
     enum MyError {
         IoError(io::Error),

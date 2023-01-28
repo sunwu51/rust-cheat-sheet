@@ -1,7 +1,5 @@
 use std::{fmt::{Debug, Display}, str::FromStr, error::Error, num::ParseIntError};
 
-use derive_error::Error;
-
 /// 1 trait 的声明与基本使用，一定记住的是特征只是一种对泛型的约束，重心还在泛型
 trait Say {
     fn say_hello(&self);

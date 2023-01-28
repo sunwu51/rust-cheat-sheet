@@ -137,3 +137,16 @@ fn main() {
 
 }
 
+// #[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn test1() {
+        println!("test1");
+    }
+
+    #[test]
+    fn test2() {
+        println!("test1");
+    }
+}
