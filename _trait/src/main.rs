@@ -43,33 +43,59 @@ where T: Say + Debug {
 }
 
 /// 3 重点来了，f1-f4 trait作为入参，其实本质可以传任何实现了该trait的类型，即这个函数底层会编译成很多份。
-/// 但是作为返回值则不可以，原因是返回值如果是动态的，例如A和B结构体都实现了trait，那么if一个条件返回A，否则返回B
+/// 但是作为返回值则不一定可行，原因是返回值如果是动态的，例如A和B结构体都实现了trait，那么if一个条件返回A，否则返回B
 /// 那么返回的类型就是不确定的，调用方的栈上就不知道申请多大的空间了，因而不能在返回值类型使用泛型+trait
-// fn f5<T>() -> T 
-// where T: Say + Debug {
-//     User {id: 1, name: "foo".to_string()}
+
+// 这个写法是错误的，因为期望返回的是T类型，编译器不知道有没有在除了返回类型的其他地方使用T
+// 所以直接返回User类型是不对的，即使我们的User确实也实现了Say+Debug
+// fn f5<T: Say+Debug>() -> T {
+//     User{id:1, name:"foo".to_string()}   
 // }
 
-/// 没有trait约束的泛型则可以作为返回值，例如f5中返回的类型是固定的T，其占用的内存与传入的t一致。
-fn f5<T>(t: T) -> T {
+// 这个写法是正确的，因为impl虽然是上面的简写，但是impl保证了T只出现在这里
+fn f5() -> impl Say+Debug {
+    User{id:1, name:"foo".to_string()}
+}
+
+// 这个写法是正确的，因为返回值的类型在编译器能确定就是User
+fn f5_1() -> impl Debug {
+    if (100>99) {
+        User{id:1, name:"foo".to_string()}
+    } else {
+        User{id:2, name:"bar".to_string()}
+    }
+}
+
+// 这个写法是错误的，因为返回值的类型
+// fn f5_2() -> impl Debug {
+//     if (100>99) {
+//         "string".to_string()
+//     } else {
+//         User{id:2, name:"bar".to_string()}
+//     }
+// }
+
+
+// 这样写是可以的，因为t一定是T类型
+fn f6<T: Say+Debug>(t: T) -> T {
     t
 }
 
-/// 针对trait作为返回值，就只能在堆上申请空间了，解决方法叫做特征对象。特征对象有两种写法Box<dyn trait>和&dyn trait
+/// 针对动态的trait类型作为返回值像f5_2，就只能在堆上申请空间了，解决方法叫做特征对象。特征对象有两种写法Box<dyn trait>和&dyn trait
 /// Box<dyn trait>实际上内部有两个指针：指向真正的结构体user的指针，和指向vTable虚函数列表的指针，这个函数列表只包含trait中定义的函数再user内的实现，无其他。
 /// dyn是一种特殊的类型，只能配合Box和&使用，且dyn只能用一个trait修饰，不能A+B，如果想要A+B可以写个C trait继承AB
 
-fn f6() -> Box<dyn Say> {
+fn f7() -> Box<dyn Say> {
     Box::new(User{id:1, name: "foo".to_string()})
 }
 
 /// 引用作为返回值的时候，有一些生命周期的限制，不过作为入参就可以了.
 ///     特征对象作为入参意义其实不大，因为普通的泛型+trait能实现该功能
-fn f7(sayer: &dyn Say) {
+fn f8(sayer: &dyn Say) {
     sayer.say_hello();
 }
 
-fn f8(sayer: &impl Say) -> &dyn Say {
+fn f9(sayer: &impl Say) -> &dyn Say {
     sayer
 }
 
@@ -107,7 +133,7 @@ fn main() {
     f4(user);
 
     let user = User {id: 1, name: "foo".to_string()};
-    let res = f8(&user);
+    let res = f9(&user);
     res.say_hello();
 
     let a = "123";
@@ -133,4 +159,13 @@ impl T1 for T {
 }
 impl T2 for T {
     fn t2_f(&self) {}
+}
+/// 7 在trait中无法将函数的返回值设置为impl xx，
+/// 但是可以通过Self返回当前结构体类型，关联类型+triat返回其他类型
+trait T3 {
+    type X: Debug;
+    
+    fn fn_a(&self) -> Self;
+
+    fn fn_b(&self) -> Self::X;
 }

@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use futures::{executor::block_on, join};
 
 /// async、await介绍，不涉及异步底层框架。仅探讨rust语法
@@ -28,4 +30,11 @@ async fn async_main() {
     // 4 使用join!让多个future同时执行，并全部执行完成后返回
     join!(f1(), f2());
 
+}
+
+fn test() -> impl Display {
+    if ( 10 > 9) {
+        return 1;
+    }
+    return "hello".to_string();
 }

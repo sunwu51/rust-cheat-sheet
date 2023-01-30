@@ -60,17 +60,29 @@ fn ff222(f: Box<dyn Fn()>) {f();}
 fn ff3(mut f: impl FnMut()) {f();}
 fn ff4(f: impl FnOnce()) {f();}
 
-// 3 作为返回值，因为特征约束不能直接用于返回类型的约束，需要用特征对象dyn（参考trait章节介绍）
+// 3 作为返回值，可以用impl也可以用特征对象
 fn rf1() -> fn() -> () {|| println!("hello")}
-fn rf2() -> Box<dyn Fn() -> ()> {
+fn rf2() -> impl Fn() -> () {
+    let x = "123".to_string();;
+    move || println!("{}", x)
+}
+fn rf22() -> Box<dyn Fn() -> ()> {
     let x = "123".to_string();;
     Box::new(move || println!("{}", x))
 }
-fn rf3() -> Box<dyn FnMut() -> ()> {
+fn rf3() -> impl FnMut() -> () {
+    let mut x = "123".to_string();
+    move || {x.push_str("456"); println!("{}", x)}
+}
+fn rf33() -> Box<dyn FnMut() -> ()> {
     let mut x = "123".to_string();
     Box::new(move || {x.push_str("456"); println!("{}", x)})
 }
-fn rf4() -> Box<dyn FnOnce() -> ()> {
+fn rf4() -> impl FnOnce() -> () {
+    let mut x = "123".to_string();
+    move || {let y = x;  println!("{}", y)}
+}
+fn rf44() -> Box<dyn FnOnce() -> ()> {
     let mut x = "123".to_string();
     Box::new(move || {let y = x;  println!("{}", y)})
 }
