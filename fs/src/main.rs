@@ -50,4 +50,16 @@ fn main() {
     file.write("345".as_bytes()).unwrap();
 
 
+    // 4 另一种访问目录的方式 read_dir
+    let mut dir = fs::read_dir("tmp").unwrap();
+
+    while let Ok(child) = dir.next().unwrap() {
+        if child.metadata().unwrap().is_dir() {
+            // 文件夹下的文件跳过
+        } else {
+            // 文件类型的直接打印
+            println!("{}", child.path().as_os_str().to_str().unwrap());
+        }
+    }
+
 }

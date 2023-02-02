@@ -1,5 +1,6 @@
+use tokio::io::AsyncWriteExt;
 
-// tokio::fs文件相关操作
+// tokio::fs文件相关操作，fs linux底层都是同步的系统调用，tokio是通过threadpool来实现的异步。
 async fn fs_read() {
     let vec = tokio::fs::read("Cargo.toml").await;
     let content: String = String::from_utf8(vec.unwrap()).unwrap();
@@ -14,6 +15,29 @@ async fn fs_write() {
     let mut dir = tokio::fs::read_dir("tmp").await.unwrap();
     let f = dir.next_entry().await.unwrap().unwrap().file_name();
     println!("{}", f.into_string().unwrap())
+}
+
+async fn fs_file() {
+    let mut file = tokio::fs::OpenOptions::new()
+        .read(true)
+        .truncate(true)
+        .write(true)
+        .open("tmp/1.txt").await.unwrap();
+
+    file.write_all("okokok".as_bytes()).await.unwrap();
+}
+
+async fn fs_dir() {
+    let mut dir = tokio::fs::read_dir("tmp").await.unwrap();
+
+    while let Some(child) = dir.next_entry().await.unwrap() {
+        if child.metadata().await.unwrap().is_dir() {
+            // 文件夹下的文件跳过
+        } else {
+            // 文件类型的直接打印
+            println!("{}", child.path().as_os_str().to_str().unwrap());
+        }
+    }
 }
 
 #[cfg(test)]
@@ -40,6 +64,28 @@ mod tests {
             .unwrap()
             .block_on(
                 fs_write()
+            )
+    }
+
+    #[test]
+    fn fs_file_test() {
+        tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()
+            .unwrap()
+            .block_on(
+                fs_file()
+            )
+    }
+
+    #[test]
+    fn fs_dir_test() {
+        tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()
+            .unwrap()
+            .block_on(
+                fs_dir()
             )
     }
 }
