@@ -2,6 +2,9 @@
 // use tokio::macros;
 
 mod fs;
+mod req;
+mod sql;
+mod web;
 use std::{time::Duration, thread};
 
 use futures::join;
