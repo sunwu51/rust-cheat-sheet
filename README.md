@@ -26,7 +26,7 @@ The project will be updated continuously
 - [thread](thread/src/main.rs)
 - [async](_async/src/main.rs)
 ## 2 crates
-- [lazy_static](_creates/src/val.rs)
+- [lazy_static](_crates/src/val.rs)
 - [anyhow](_crates/src/ah.rs)
 - [thiserror](_crates/src/te.rs)
 - [serde / serde_json](https://github.com/sunwu51/notebook/blob/master/22.10/rust_%E7%BB%84%E7%BB%87%E9%A1%B9%E7%9B%AE%E4%B8%8E%E5%B8%B8%E7%94%A8%E5%BA%93%E7%9A%84%E4%BB%8B%E7%BB%8D.md#1-serde%E4%B8%8Eserde_json)
