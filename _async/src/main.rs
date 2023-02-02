@@ -1,8 +1,10 @@
 use std::fmt::Display;
 
-use futures::{executor::block_on, join};
+use futures::{executor::block_on, join, Future};
 
 /// async、await介绍，不涉及异步底层框架。仅探讨rust语法
+/// 
+/// 
 /// --- 需要引入官方futures包，这个包不内置，才支持该语法
 /// 1 async修饰函数
 async fn f1() -> i32 {
@@ -29,12 +31,17 @@ fn main() {
 async fn async_main() {
     // 4 使用join!让多个future同时执行，并全部执行完成后返回
     join!(f1(), f2());
+    f3().await;
+    // println!("{}", f3().await);
 
 }
 
-fn test() -> impl Display {
-    if ( 10 > 9) {
-        return 1;
+// 5 async{}代码块，返回值也是Future。
+//  async move{} 是常见的形式，move和闭包中move一致，都是转移所有权进去
+fn f3() -> impl Future<Output=()> {
+    let x = "1".to_owned();
+
+    async move {
+        println!("{x}");
     }
-    return "hello".to_string();
 }
