@@ -45,7 +45,3 @@ fn f3() -> impl Future<Output=()> {
         println!("{x}");
     }
 }
-
-async fn f4() {
-    stream::unfold
-}
